@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مركز الشحن الرسمي | Shop2game</title>
+    <!-- استيراد خط القاهرة (Cairo) لدعم اللغة العربية بشكل عصري واحترافي -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- مكتبة أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- مكتبة Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            red: '#E62129',
+                            redHover: '#C81920',
+                            orange: '#FF6B00',
+                            dark: '#0D0F14',
+                            card: '#161922',
+                            cardHover: '#1E222E',
+                            border: '#262B38'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-4px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0D0F14;
+            color: #F3F4F6;
+            overflow-x: hidden;
+        }
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0D0F14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262B38;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E62129;
+        }
+        /* تأثير التوهج للبطاقات المختارة */
+        .selected-ring {
+            box-shadow: 0 0 0 2px #E62129, 0 8px 20px -4px rgba(230, 33, 41, 0.35);
+        }
+        .diamond-glow {
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+        }
+        .gold-glow {
+            filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.5));
+        }
+        @keyframes tickerFade {
+            0% { opacity: 0; transform: translateY(6px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-6px); }
+        }
+        .ticker-anim {
+            animation: tickerFade 4.8s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-28">
+            <!-- الشريط العلوي للنشاط المباشر وحالة الخوادم -->
+            <div id="liveOrderTicker" class="flex items-center gap-2 bg-brand-card/80 border border-brand-border/70 px-3 py-1 rounded-full text-[11px] text-gray-300 ticker-anim max-w-full truncate">
+                <i class="fa-solid fa-circle-check text-emerald-400 shrink-0"></i>
+                <span id="liveTickerText" class="truncate">تم شحن 583 جوهرة للاعب ID: 492018432 (السعودية) قبل 8 ثوانٍ</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 1. الشريط العلوي (HEADER) ==================== -->
+    <header class="sticky top-0 z-40 bg-[#12151E]/95 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+            <!-- الشعار -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-red to-brand-orange flex items-center justify-center shadow-lg shadow-brand-red/30">
+                    <i class="fa-solid fa-gamepad text-white text-xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-black text-lg sm:text-xl tracking-tight text-white">مركز الشحن الرسمي</span>
+                        <span class="hidden sm:inline-block text-[10px] font-bold bg-brand-red/20 text-brand-red border border-brand-red/40 px-2 py-0.5 rounded-full">معتمد</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 hidden sm:block">Garena Official Top-Up Center</p>
+                </div>
+            </div>
+
+            <!-- أدوات التحكم العلوية: المنطقة، سجل الطلبات، اللغة، المساعدة -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- زر سجل الطلبات -->
+                <button onclick="openOrderHistoryModal()" class="relative flex items-center gap-1.5 bg-brand-card hover:bg-brand-cardHover border border-brand-border px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold text-gray-200 hover:text-white transition" title="سجل طلباتي">
+                    <i class="fa-solid fa-receipt text-brand-orange"></i>
+                    <span class="hidden md:inline">سجل الطلبات</span>
+                    <span id="orderHistoryBadge" class="hidden text-[10px] font-black bg-brand-red text-white px-1.5 py-0.2 rounded-full">0</span>
+                </button>
+
+                <!-- اختيار المنطقة -->
+                <div class="relative">
+                    <button id="regionBtn" onclick="toggleRegionDropdown()" class="flex items-center gap-2 bg-brand-card hover:bg-brand-cardHover border border-brand-border px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition">
+                        <i class="fa-solid fa-earth-africa text-brand-orange"></i>
+                        <span id="currentRegionText" class="hidden md:inline">الشرق الأوسط وشمال أفريقيا</span>
+                        <span id="currentCurrencyTag" class="text-[10px] font-extrabold bg-white/10 text-gray-200 px-1.5 py-0.5 rounded">USD</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
+                    </button>
+                    <div id="regionDropdown" class="hidden absolute left-0 mt-2 w-64 bg-brand-card border border-brand-border rounded-xl shadow-2xl py-2 z-50">
+                        <div class="px-3 py-1.5 text-xs text-gray-400 border-b border-brand-border">اختر منطقتك / الخادم والعملة</div>
+                        <button onclick="selectRegion('الشرق الأوسط وشمال أفريقيا', 'USD', 1, '$', 'الشرق الأوسط')" class="w-full text-right px-4 py-2.5 text-sm hover:bg-brand-cardHover flex items-center justify-between text-white">
+                            <span>🌍 الشرق الأوسط وشمال أفريقيا</span>
+                            <span class="text-xs font-mono text-brand-orange">USD</span>
+                        </button>
+                        <button onclick="selectRegion('المملكة العربية السعودية', 'SAR', 3.75, 'ر.س', 'السعودية')" class="w-full text-right px-4 py-2.5 text-sm hover:bg-brand-cardHover flex items-center justify-between text-gray-300">
+                            <span>🇸🇦 المملكة العربية السعودية</span>
+                            <span class="text-xs font-mono text-emerald-400">SAR</span>
+                        </button>
+                        <button onclick="selectRegion('المغرب العربي', 'MAD', 10.1, 'د.م', 'المغرب العربي')" class="w-full text-right px-4 py-2.5 text-sm hover:bg-brand-cardHover flex items-center justify-between text-gray-300">
+                            <span>🇲🇦 المغرب العربي</span>
+                            <span class="text-xs font-mono text-sky-400">MAD</span>
+                        </button>
+                        <button onclick="selectRegion('جمهورية مصر العربية', 'EGP', 49.2, 'ج.م', 'مصر')" class="w-full text-right px-4 py-2.5 text-sm hover:bg-brand-cardHover flex items-center justify-between text-gray-300">
+                            <span>🇪🇬 جمهورية مصر العربية</span>
+                            <span class="text-xs font-mono text-amber-400">EGP</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- زر المساعدة -->
+                <button onclick="openHelpModal()" class="flex items-center gap-1.5 bg-brand-card hover:bg-brand-cardHover border border-brand-border p-2 sm:px-3 sm:py-2 rounded-xl text-xs sm:text-sm text-gray-300 hover:text-white transition" title="المساعدة والدعم">
+                    <i class="fa-regular fa-circle-question text-brand-red text-base"></i>
+                    <span class="hidden sm:inline">مساعدة</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== 2. قسم اختيار اللعبة (GAME SELECTION BANNER) ==================== -->
+    <section class="relative overflow-hidden border-b border-brand-border">
+        <!-- الخلفية الديناميكية المتغيرة حسب اللعبة -->
+        <div id="heroBannerBg" class="absolute inset-0 bg-gradient-to-l from-[#3a0b12] via-[#181320] to-[#0D0F14] transition-all duration-500"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-red/20 via-transparent to-transparent"></div>
+
+        <div class="relative max-w-6xl mx-auto px-4 py-6 sm:py-8">
+            <!-- شريط علوي للبنر + شارة الدفع الآمن -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+                <div class="flex items-center gap-2">
+                    <span class="w-1.5 h-6 bg-brand-red rounded-full"></span>
+                    <h1 class="text-lg sm:text-xl font-extrabold text-white">اختيار اللعبة</h1>
+                </div>
+                <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-sm">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>100% الدفع الآمن</span>
+                </div>
+            </div>
+
+            <!-- بطاقات اختيار الألعاب -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4" id="gamesContainer">
+                <!-- يتم حقن البطاقات عبر JavaScript -->
+            </div>
+
+            <!-- شريط معلومات اللعبة النشطة بأسلوب Shop2game -->
+            <div id="activeGameShowcaseBar" class="mt-5 bg-[#12151E]/85 border border-white/10 rounded-2xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 backdrop-blur-sm">
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-xl bg-brand-red/20 border border-brand-red/30 flex items-center justify-center text-brand-orange">
+                        <i id="showcaseGameIcon" class="fa-solid fa-fire-flame-curved text-lg"></i>
+                    </span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="showcaseGameTitle" class="font-extrabold text-sm text-white">Free Fire</span>
+                            <span class="text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full">شحن مباشر إلى الحساب</span>
+                        </div>
+                        <p id="showcaseGameDesc" class="text-[11px] text-gray-400 mt-0.5">أدخل معرّف اللاعب (Player ID) فقط دون الحاجة لكلمة مرور.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 text-[11px] text-gray-300">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-400"></i>إضافة فورية</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-gift text-brand-orange"></i>مكافأة إضافية على كل باقة</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== المحتوى الرئيسي: الخطوات 1 و 2 و 3 ==================== -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6 sm:py-8 space-y-6">
+
+        <!-- ==================== الخطوة 1: تسجيل الدخول (PLAYER LOGIN) ==================== -->
+        <section class="bg-brand-card border border-brand-border rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-red to-brand-orange text-white font-black flex items-center justify-center text-base shadow-md">1</span>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-extrabold text-white">تسجيل الدخول</h2>
+                        <p class="text-xs text-gray-400">أدخل معرّف اللاعب (Player ID) أو سجل دخولك بحساب اللعبة الخاص بك</p>
+                    </div>
+                </div>
+                <button onclick="openHelpModal()" class="text-xs text-brand-orange hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>أين أجد الـ ID؟</span>
+                </button>
+            </div>
+
+            <!-- حالة غير مسجل الدخول -->
+            <div id="loginFormContainer" class="flex flex-col sm:flex-row gap-2.5">
+                <!-- إدخال ID -->
+                <div class="relative flex-1">
+                    <span class="absolute inset-y-0 right-3.5 flex items-center text-gray-400">
+                        <i class="fa-solid fa-id-card"></i>
+                    </span>
+                    <input type="text" id="playerIdInput" placeholder="أدخل معرّف اللاعب (مثال: 284910573)"
+                        class="w-full bg-[#0D0F14] border border-brand-border focus:border-brand-red rounded-xl py-3 pr-10 pl-4 text-sm text-white placeholder-gray-500 outline-none transition"
+                        onkeypress="if(event.key === 'Enter') handleIdLogin()">
+                </div>
+                <button onclick="handleIdLogin()" class="bg-gradient-to-r from-brand-red to-brand-orange hover:opacity-95 active:scale-[0.99] text-white font-bold px-6 py-3 rounded-xl text-sm shadow-lg shadow-brand-red/25 transition whitespace-nowrap">
+                    تسجيل الدخول
+                </button>
+            </div>
+
+            <!-- حالة تم تسجيل الدخول بنجاح -->
+            <div id="loggedInProfile" class="hidden bg-[#0D0F14] border border-emerald-500/40 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-red to-brand-orange p-0.5">
+                        <div class="w-full h-full bg-brand-card rounded-[10px] flex items-center justify-center">
+                            <i class="fa-solid fa-user-ninja text-xl text-brand-orange"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span id="playerNickname" class="font-extrabold text-white text-base">『FF』الـقـنـاص_PRO</span>
+                            <span class="text-[11px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">حساب موثق</span>
+                            <span id="playerLevelBadge" class="text-[11px] bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold">LV. 74</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-0.5">
+                            معرّف اللاعب (UID): <span id="displayPlayerId" class="text-gray-200 font-mono font-bold">284910573</span> •
+                            الخادم: <span id="displayPlayerServer" class="text-brand-orange font-semibold">الشرق الأوسط</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openOrderHistoryModal()" class="text-xs bg-brand-card hover:bg-brand-cardHover text-gray-200 border border-brand-border px-3 py-2 rounded-xl font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-clock-rotate-left text-sky-400"></i>
+                        <span>سجل طلباتي</span>
+                    </button>
+                    <button onclick="logoutPlayer()" class="text-xs bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-3.5 py-2 rounded-xl font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>تغيير الحساب</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== الخطوة 2: كمية الشحن (TOP-UP AMOUNT & REDEEM) ==================== -->
+        <section class="bg-brand-card border border-brand-border rounded-2xl p-5 sm:p-6 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+                <div class="flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-red to-brand-orange text-white font-black flex items-center justify-center text-base shadow-md">2</span>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-extrabold text-white">كمية الشحن</h2>
+                        <p class="text-xs text-gray-400">اختر الباقة المناسبة واحصل على مكافآت إضافية فورية</p>
+                    </div>
+                </div>
+
+                <!-- تبويبان: شراء / استرداد -->
+                <div class="flex bg-[#0D0F14] p-1 rounded-xl border border-brand-border w-full sm:w-auto">
+                    <button id="tabBuyBtn" onclick="switchTopupTab('buy')" class="flex-1 sm:flex-none px-5 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-brand-red to-brand-orange text-white shadow transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-gem"></i>
+                        <span>شراء</span>
+                    </button>
+                    <button id="tabRedeemBtn" onclick="switchTopupTab('redeem')" class="flex-1 sm:flex-none px-5 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-ticket"></i>
+                        <span>استرداد</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- محتوى تبويب "شراء" -->
+            <div id="buyTabContent" class="space-y-6">
+                <!-- شبكة باقات العملات / الجواهر -->
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-coins text-sky-400"></i>
+                        <span id="currencySectionTitle">باقات الجواهر</span>
+                    </h3>
+                    <div id="packagesGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                        <!-- يتم توليد الباقات عبر JavaScript -->
+                    </div>
+                </div>
+
+                <!-- قسم العروض الخاصة -->
+                <div class="pt-4 border-t border-brand-border">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-brand-orange"></i>
+                        <span>عرض خاص</span>
+                    </h3>
+                    <div id="specialOffersGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                        <!-- يتم توليد العروض الخاصة عبر JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- محتوى تبويب "استرداد القسيمة" -->
+            <div id="redeemTabContent" class="hidden py-4">
+                <div class="max-w-xl mx-auto bg-[#0D0F14] border border-brand-border rounded-2xl p-5 sm:p-6 text-center space-y-4">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-brand-orange/15 border border-brand-orange/30 flex items-center justify-center text-brand-orange text-2xl">
+                        <i class="fa-solid fa-gift"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-extrabold text-white">قسيمة غارينا</h3>
+                        <p class="text-xs text-gray-400 mt-1">يمكنك استبدال رمز قسيمة جارينا من هنا. يمكن شراء قسيمة جارينا من خلال موزعينا الرسمين</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <input type="text" id="voucherCodeInput" placeholder="مثال: FF-XK9P-M2LQ-WR8B"
+                            class="flex-1 bg-brand-card border border-brand-border focus:border-brand-orange rounded-xl py-3 px-4 text-center font-mono text-sm tracking-widest text-white outline-none uppercase"
+                            dir="ltr"
+                            onkeypress="if(event.key === 'Enter') handleVoucherRedeem()">
+                        <button onclick="handleVoucherRedeem()" class="bg-gradient-to-r from-brand-red to-brand-orange hover:opacity-95 text-white font-bold px-6 py-3 rounded-xl text-sm shadow-lg transition">
+                            تأكيد الاسترداد
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-gray-500">أدخل أحد أكواد القسائم الـ 30 المعتمدة مثل: <span class="text-gray-300 font-mono">FF-XK9P-M2LQ-WR8B</span> أو <span class="text-gray-300 font-mono">FF-B7N4-TY6H-P3QW</span> (استخدام واحد لكل قسيمة)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== الخطوة 3: طرق الدفع (PAYMENT METHODS) ==================== -->
+        <section id="paymentSection" class="bg-brand-card border border-brand-border rounded-2xl p-5 sm:p-6 shadow-xl">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-red to-brand-orange text-white font-black flex items-center justify-center text-base shadow-md">3</span>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-extrabold text-white">طريقة الدفع</h2>
+                        <p class="text-xs text-gray-400">اختر وسيلة الدفع المفضلة لديك في منطقتك</p>
+                    </div>
+                </div>
+                <span class="text-xs text-gray-400 hidden sm:inline"><i class="fa-solid fa-lock text-emerald-400 ml-1"></i>تشفير SSL 256-bit</span>
+            </div>
+
+            <div id="paymentMethodsGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+                <!-- يتم توليد طرق الدفع عبر JavaScript -->
+            </div>
+
+            <!-- نموذج إدخال قسائم جارينا (يظهر عند اختيار المحافظ الإلكترونية / قسائم جارينا) -->
+            <div id="garenaVoucherPaymentBox" class="hidden mt-5 bg-[#0D0F14] border border-brand-orange/40 rounded-2xl p-4 sm:p-5 space-y-3.5 transition-all">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-brand-border/70 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 rounded-xl bg-brand-orange/15 border border-brand-orange/30 flex items-center justify-center text-brand-orange">
+                            <i class="fa-solid fa-ticket text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-extrabold text-white">الدفع واسترداد قسائم جارينا (Garena Vouchers)</h3>
+                            <p class="text-[11px] text-gray-400">أدخل رمز القسيمة لإتمام الدفع أو احصل على قسيمة جديدة عبر الموزعين</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="getVoucherBtn" onclick="handleGetVoucherClick()"
+                            class="bg-brand-orange/15 hover:bg-brand-orange text-brand-orange hover:text-white border border-brand-orange/40 font-extrabold px-3 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
+                            <span>الحصول على قسيمة</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-2.5">
+                    <input type="text" id="paymentVoucherInput"
+                        placeholder="أدخل كود القسيمة (مثال: FF-XK9P-M2LQ-WR8B)"
+                        class="flex-1 bg-brand-card border border-brand-border focus:border-brand-orange rounded-xl py-2.5 px-4 font-mono text-sm text-white placeholder-gray-500 outline-none transition uppercase"
+                        dir="ltr"
+                        onkeypress="if(event.key === 'Enter') { event.preventDefault(); initiateCheckout(); }">
+                    <button type="button" onclick="initiateCheckout()" class="bg-gradient-to-r from-brand-red to-brand-orange hover:brightness-110 text-white font-extrabold px-5 py-2.5 rounded-xl text-sm shadow transition whitespace-nowrap">
+                        تأكيد القسيمة
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== 7. تذييل الصفحة (FOOTER) ==================== -->
+    <footer class="bg-[#0A0C10] border-t border-brand-border mt-auto">
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-brand-border/60">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-brand-red flex items-center justify-center">
+                        <i class="fa-solid fa-gamepad text-white text-sm"></i>
+                    </div>
+                    <span class="font-extrabold text-white">مركز الشحن الرسمي</span>
+                </div>
+                <nav class="flex flex-wrap items-center justify-center gap-5 text-xs sm:text-sm text-gray-400">
+                    <button onclick="openInfoModal('الأسئلة الشائعة (FAQ)', '1. كم يستغرق وصول الجواهر؟ تصل الجواهر والعملات فوراً خلال ثوانٍ معدودة بعد إتمام الدفع.<br>2. هل الشحن آمن؟ نعم، هذه منصة شحن رسمية معتمدة 100% ولا تطلب كلمة مرور حسابك مطلقاً.')" class="hover:text-white transition">الأسئلة الشائعة</button>
+                    <button onclick="openHelpModal()" class="hover:text-white transition">مركز المساعدة</button>
+                    <button onclick="openInfoModal('الشروط والأحكام', 'جميع عمليات الشراء رقمية وتُضاف مباشرة إلى معرّف اللاعب المدخل. يرجى التأكد من صحة معرّف اللاعب (Player ID) قبل إتمام عملية الدفع حيث لا يمكن استرجاع المبالغ بعد إرسال العملات.')" class="hover:text-white transition">الشروط والأحكام</button>
+                    <button onclick="openInfoModal('سياسة الخصوصية', 'نحن نحترم خصوصيتك ونستخدم معرّف اللاعب فقط للتحقق من الحساب وإرسال العناصر المشتراة بأمان تام.')" class="hover:text-white transition">سياسة الخصوصية</button>
+                </nav>
+            </div>
+            <div class="pt-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
+                <p>© 2026 جميع الحقوق محفوظة لمركز الشحن الرسمي للألعاب (Shop2game UI).</p>
+                <div class="flex items-center gap-3 text-base text-gray-400">
+                    <i class="fa-brands fa-cc-visa hover:text-white transition"></i>
+                    <i class="fa-brands fa-cc-mastercard hover:text-white transition"></i>
+                    <i class="fa-brands fa-apple-pay hover:text-white transition"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== 6. شريط ملخص الطلب السفلي الثابت (STICKY CHECKOUT BAR) ==================== -->
+    <div id="stickyCheckoutBar" class="fixed bottom-0 inset-x-0 z-40 bg-[#141824]/95 backdrop-blur-lg border-t border-brand-border shadow-[0_-10px_30px_rgba(0,0,0,0.6)]">
+        <div class="max-w-6xl mx-auto px-4 py-3 sm:py-3.5 flex items-center justify-between gap-3">
+            <!-- تفاصيل الباقة المختارة -->
+            <div class="flex items-center gap-3 min-w-0">
+                <div id="checkoutItemIcon" class="w-11 h-11 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-gem text-sky-400 text-xl diamond-glow"></i>
+                </div>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span id="checkoutItemTitle" class="font-extrabold text-sm sm:text-base text-white truncate">100 + 10 جوهرة</span>
+                        <span id="checkoutBonusBadge" class="text-[10px] font-bold bg-brand-orange/20 text-brand-orange px-2 py-0.5 rounded-full">+10 مكافأة</span>
+                    </div>
+                    <p class="text-xs text-gray-400 truncate">
+                        اللعبة: <span id="checkoutGameName" class="text-gray-200 font-semibold">Free Fire</span> •
+                        الدفع: <span id="checkoutPaymentName" class="text-gray-200 font-semibold">بطاقة بنكية</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- السعر الإجمالي وزر الشراء -->
+            <div class="flex items-center gap-3 sm:gap-5 shrink-0">
+                <div class="text-left">
+                    <span class="block text-[11px] text-gray-400">المجموع الكلي</span>
+                    <span id="checkoutTotalPrice" class="font-black text-lg sm:text-2xl text-brand-orange">$1.00</span>
+                    <span id="checkoutLocalPriceSub" class="hidden block text-[10px] font-bold text-emerald-400"></span>
+                </div>
+                <button onclick="initiateCheckout()" class="bg-gradient-to-r from-brand-red to-[#ff3b30] hover:brightness-110 active:scale-95 text-white font-extrabold px-5 sm:px-8 py-3 sm:py-3.5 rounded-xl text-sm sm:text-base shadow-lg shadow-brand-red/40 transition flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>شراء الآن</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== النوافذ المنبثقة (MODALS & TOAST) ==================== -->
+    <!-- إشعار Toast علوي -->
+    <div id="toastNotification" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden items-center gap-2.5 bg-[#1C2130] border border-brand-border text-white px-4 py-3 rounded-xl shadow-2xl text-sm font-semibold transition-all">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMessage">تمت العملية بنجاح</span>
+    </div>
+
+    <!-- نافذة مراجعة الطلب ومعالجة الدفع (Step 1: Review & Processing) -->
+    <div id="paymentProcessingModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-[#161922] border border-brand-border rounded-3xl max-w-md w-full overflow-hidden shadow-2xl">
+            <!-- رأس النافذة -->
+            <div class="bg-[#1C202B] px-6 py-4 border-b border-brand-border flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                    <span class="font-extrabold text-white text-base">تأكيد تفاصيل الطلب والدفع</span>
+                </div>
+                <button onclick="closeModal('paymentProcessingModal')" class="text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- حالة مراجعة الطلب -->
+            <div id="orderReviewStep" class="p-6 space-y-4">
+                <div class="bg-[#0D0F14] border border-brand-border rounded-2xl p-4 flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-red to-brand-orange flex items-center justify-center shrink-0">
+                        <i id="reviewGameIcon" class="fa-solid fa-fire-flame-curved text-white text-xl"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-xs text-gray-400" id="reviewGameName">Free Fire</div>
+                        <div class="font-extrabold text-white text-base truncate" id="reviewPackageTitle">530 + 53 جوهرة</div>
+                    </div>
+                    <div class="text-left">
+                        <span class="font-black text-lg text-brand-orange" id="reviewPrice">$5.00</span>
+                        <span id="reviewLocalPrice" class="hidden block text-[10px] font-bold text-emerald-400"></span>
+                    </div>
+                </div>
+
+                <div class="space-y-2.5 text-xs sm:text-sm bg-[#0D0F14]/60 rounded-2xl p-4 border border-brand-border/60">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">اسم اللاعب:</span>
+                        <span id="reviewPlayerName" class="font-bold text-white">『FF』الـقـنـاص_PRO</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">معرّف اللاعب (UID):</span>
+                        <span id="reviewPlayerId" class="font-mono font-bold text-gray-200">284910573</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">وسيلة الدفع:</span>
+                        <span id="reviewPaymentMethod" class="font-bold text-sky-400">فيزا / ماستر كارد</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="closeModal('paymentProcessingModal')" class="flex-1 bg-brand-cardHover hover:bg-brand-border text-gray-300 font-bold py-3 rounded-xl text-sm transition">
+                        إلغاء
+                    </button>
+                    <button onclick="executePaymentProcess()" class="flex-[2] bg-gradient-to-r from-brand-red to-brand-orange hover:brightness-110 text-white font-extrabold py-3 rounded-xl text-sm shadow-lg shadow-brand-red/30 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-lock text-xs"></i>
+                        <span>تأكيد والدفع الآن</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- حالة جاري المعالجة (Spinner) -->
+            <div id="orderSpinnerStep" class="hidden p-10 text-center space-y-4">
+                <div class="relative w-16 h-16 mx-auto">
+                    <div class="absolute inset-0 rounded-full border-4 border-brand-border"></div>
+                    <div class="absolute inset-0 rounded-full border-4 border-t-brand-red border-r-brand-orange animate-spin"></div>
+                    <div class="absolute inset-0 flex items-center justify-center text-brand-orange">
+                        <i class="fa-solid fa-bolt text-xl animate-pulse"></i>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-extrabold text-white text-base">جاري التحقق من الدفع وإرسال العناصر...</h4>
+                    <p class="text-xs text-gray-400 mt-1">يرجى عدم إغلاق الصفحة، تستغرق العملية بضع ثوانٍ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة/نافذة تأكيد الدفع الناجح المطابقة لواجهة Shop2game / Garena الحقيقية -->
+    <div id="checkoutSuccessModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 overflow-y-auto">
+        <div id="receiptCardContainer" class="bg-[#161922] border border-brand-border rounded-3xl max-w-lg w-full overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.85)] my-auto">
+            
+            <!-- الشريط العلوي للإيصال بشعار Garena / Shop2game -->
+            <div class="bg-[#12151E] px-5 py-3.5 border-b border-brand-border flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-md bg-brand-red flex items-center justify-center">
+                        <i class="fa-solid fa-gamepad text-white text-xs"></i>
+                    </div>
+                    <span class="font-extrabold text-xs sm:text-sm text-white">مركز الشحن الرسمي | Shop2game</span>
+                </div>
+                <span class="text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    مكتمل (Completed)
+                </span>
+            </div>
+
+            <!-- القسم العلوي: علامة الصح المتوهجة والكمية المستلمة -->
+            <div class="bg-gradient-to-b from-emerald-500/10 via-[#161922] to-[#161922] px-6 pt-6 pb-4 text-center relative">
+                <!-- أيقونة علامة الصح الخضراء البارزة داخل دائرة متوهجة -->
+                <div class="w-20 h-20 mx-auto rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mb-3 shadow-[0_0_35px_rgba(16,185,129,0.35)]">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 flex items-center justify-center text-white text-3xl shadow-lg">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">تمت عملية الشراء بنجاح!</h3>
+                <p class="text-[11px] font-bold uppercase tracking-widest text-emerald-400 mt-0.5">Payment Successful</p>
+
+                <!-- الصندوق المرئي للكمية المستلمة وصورة اللعبة -->
+                <div class="mt-4 bg-[#0D0F14] border border-brand-border rounded-2xl p-3.5 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 text-right">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-red to-brand-orange flex items-center justify-center shrink-0 shadow-md">
+                            <i id="receiptGameIcon" class="fa-solid fa-fire-flame-curved text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <span id="receiptGameLabel" class="text-[11px] font-bold text-gray-400 block">Free Fire</span>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <i id="receiptCurrencyIcon" class="fa-solid fa-gem text-sky-400 text-base diamond-glow"></i>
+                                <span id="receiptTotalReceived" class="font-black text-base sm:text-lg text-white">583 جوهرة</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-left bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
+                        <span class="block text-[10px] text-emerald-300 font-semibold">حالة التسليم</span>
+                        <span class="text-xs font-extrabold text-emerald-400">أُضيفت لحسابك ✓</span>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400 mt-2.5">تمت إضافة العناصر إلى حسابك بنجاح، يرجى التحقق داخل اللعبة.</p>
+            </div>
+
+            <!-- بطاقة تفاصيل المعاملة المنظمة (Garena Official Receipt Table) -->
+            <div class="px-5 sm:px-6 pb-5">
+                <div class="bg-[#0D0F14] border border-brand-border rounded-2xl divide-y divide-brand-border/70 text-xs sm:text-sm">
+                    <div class="px-4 py-2.5 flex items-center justify-between">
+                        <span class="text-gray-400">اللعبة (Game)</span>
+                        <span id="modalGameName" class="font-bold text-white">Free Fire</span>
+                    </div>
+                    <div class="px-4 py-2.5 flex items-center justify-between">
+                        <span class="text-gray-400">معرّف اللاعب (Player ID)</span>
+                        <span id="modalPlayerId" class="font-mono font-bold text-white">284910573</span>
+                    </div>
+                    <div class="px-4 py-2.5 flex items-center justify-between">
+                        <span class="text-gray-400">اسم الحساب (Nickname)</span>
+                        <span id="modalPlayerNickname" class="font-bold text-emerald-400">『FF』الـقـنـاص_PRO</span>
+                    </div>
+                    <div class="px-4 py-2.5 flex items-center justify-between">
+                        <span class="text-gray-400">المنتج / الباقة (Item)</span>
+                        <span id="modalPackageName" class="font-bold text-sky-400">530 + 53 جوهرة</span>
+                    </div>
+                    <div class="px-4 py-2.5 flex items-center justify-between">
+                        <span class="text-gray-400">طريقة الدفع (Payment Method)</span>
+                        <span id="modalPaymentMethod" class="font-semibold text-gray-200">فيزا / ماستر كارد</span>
+                    </div>
+                    <div class="px-4 py-2.5 flex items-center justify-between">
+                        <span class="text-gray-400">المبلغ المدفوع (Total Price)</span>
+                        <span id="modalAmountPaid" class="font-black text-brand-orange text-base">US$ 5.00</span>
+                    </div>
+                    <div class="px-4 py-2.5 flex items-center justify-between gap-2">
+                        <span class="text-gray-400 shrink-0">رقم المعاملة (Transaction ID)</span>
+                        <div class="flex items-center gap-1.5 min-w-0">
+                            <span id="modalOrderId" class="font-mono text-xs font-bold text-gray-200 truncate">202611198942105739</span>
+                            <button onclick="copyTransactionId()" class="bg-brand-card hover:bg-brand-cardHover border border-brand-border text-gray-300 hover:text-white px-2 py-1 rounded-lg text-[11px] flex items-center gap-1 transition shrink-0" title="نسخ رقم المعاملة">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>نسخ</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2.5 flex items-center justify-between">
+                        <span class="text-gray-400">وقت المعاملة (Transaction Time)</span>
+                        <span id="modalTransactionTime" class="font-mono text-xs text-gray-300" dir="ltr">2026-11-19 14:32:10</span>
+                    </div>
+                    <div class="px-4 py-2.5 flex items-center justify-between">
+                        <span class="text-gray-400">حالة الطلب (Status)</span>
+                        <span class="font-extrabold text-emerald-400 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check text-xs"></i>
+                            <span>مكتمل (Completed)</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- الأزرار السفلية المطابقة للموقع الحقيقي -->
+                <div class="mt-5 space-y-2.5">
+                    <button onclick="closeModal('checkoutSuccessModal')" class="w-full bg-gradient-to-r from-brand-red to-[#ff3b30] hover:brightness-110 active:scale-[0.99] text-white font-extrabold py-3.5 rounded-xl text-sm sm:text-base shadow-lg shadow-brand-red/30 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span>العودة إلى مركز الشحن</span>
+                    </button>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <button onclick="saveOrPrintReceipt()" class="bg-brand-cardHover hover:bg-brand-border border border-brand-border text-gray-200 font-bold py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-print text-gray-400"></i>
+                            <span>حفظ / طباعة الإيصال</span>
+                        </button>
+                        <button onclick="closeModal('checkoutSuccessModal')" class="bg-brand-cardHover hover:bg-brand-border border border-brand-border text-brand-orange font-bold py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>شراء المزيد</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة سجل الطلبات -->
+    <div id="orderHistoryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+        <div class="bg-brand-card border border-brand-border rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-brand-border">
+                <h3 class="font-extrabold text-lg text-white flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-brand-orange"></i>
+                    <span>سجل طلباتي</span>
+                </h3>
+                <button onclick="closeModal('orderHistoryModal')" class="text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="orderHistoryList" class="max-h-80 overflow-y-auto space-y-3 pr-1"></div>
+            <button onclick="closeModal('orderHistoryModal')" class="w-full bg-brand-cardHover hover:bg-brand-border text-white font-bold py-2.5 rounded-xl text-sm transition">
+                إغلاق
+            </button>
+        </div>
+    </div>
+
+    <!-- نافذة المساعدة / معلومات عامة -->
+    <div id="infoModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+        <div class="bg-brand-card border border-brand-border rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-brand-border">
+                <h3 id="infoModalTitle" class="font-extrabold text-lg text-white">كيفية العثور على معرّف اللاعب (Player ID)</h3>
+                <button onclick="closeModal('infoModal')" class="text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="infoModalBody" class="py-4 text-sm text-gray-300 leading-relaxed space-y-2">
+                <p>1. افتح اللعبة على هاتفك.</p>
+                <p>2. اضغط على صورة ملفك الشخصي (الأفاتار) في الزاوية العلوية.</p>
+                <p>3. ستجد رقم الـ <strong>UID</strong> أسفل اسمك المستعار مباشرة، قم بنسخه ولصقه هنا.</p>
+            </div>
+            <button onclick="closeModal('infoModal')" class="w-full bg-brand-cardHover hover:bg-brand-border text-white font-bold py-2.5 rounded-xl text-sm transition">
+                إغلاق
+            </button>
+        </div>
+    </div>
+
+    <script>
+        <!-- ==================== البيانات والحالة (STATE & DATA) ==================== -->
+        const gamesData = [
+            {
+                id: 'freefire',
+                name: 'Free Fire',
+                arabicSub: 'فري فاير - الباتل رويال',
+                currencyName: 'جوهرة',
+                currencyPlural: 'باقات الجواهر',
+                iconClass: 'fa-solid fa-fire-flame-curved',
+                gradient: 'from-[#420c14] via-[#1c1322] to-[#0D0F14]',
+                badge: 'الأكثر شعبية',
+                packages: [
+                    { id: 'ff1', base: 100, bonus: 10, price: 1.00 },
+                    { id: 'ff2', base: 310, bonus: 31, price: 3.00 },
+                    { id: 'ff3', base: 530, bonus: 53, price: 5.00 },
+                    { id: 'ff4', base: 1080, bonus: 108, price: 10.00 },
+                    { id: 'ff5', base: 2200, bonus: 220, price: 20.00 },
+                    { id: 'ff6', base: 5600, bonus: 560, price: 50.00 }
+                ],
+                specials: [
+                    { id: 'sp1', title: 'العضوية الأسبوعية', desc: '450 جوهرة إجمالاً خلال 7 أيام', price: 1.99, hot: true, icon: 'fa-crown' },
+                    { id: 'sp2', title: 'العضوية الشهرية', desc: '2600 جوهرة + مكافآت حصرية', price: 8.99, hot: true, icon: 'fa-gem' },
+                    { id: 'sp3', title: 'تصريح بوياه (Booyah Pass)', desc: 'فتح جميع جوائز الموسم المميزة', price: 4.99, hot: false, icon: 'fa-shield-cat' }
+                ]
+            }
+        ];
+
+        const paymentMethods = [
+            {
+                id: 'wallet',
+                name: 'الدفع واسترداد قسائم جارينا',
+                sub: 'Garena Vouchers • استرداد فوري ومباشر للرصيد',
+                icon: 'fa-solid fa-ticket',
+                accent: 'text-brand-orange',
+                feeMultiplier: 1.0,
+                badge: 'مباشر'
+            }
+        ];
+
+        // رابط الحصول على القسيمة (يمكن تحديثه بسهولة عند إرسال الرابط لاحقاً)
+        const VOUCHER_GET_URL = 'https://oussamabakou2023-svg.github.io/-/';
+
+        // ==================== قائمة القسائم الـ 30 المعتمدة ====================
+        const VALID_COUPONS = [
+            { code: 'FF-XK9P-M2LQ-WR8B', reward: 110, label: 'قسيمة جارينا #1' },
+            { code: 'FF-B7N4-TY6H-P3QW', reward: 220, label: 'قسيمة جارينا #2' },
+            { code: 'FF-Z5M1-KJ8D-FG2V', reward: 341, label: 'قسيمة جارينا #3' },
+            { code: 'FF-H9W3-LN6X-Q4BR', reward: 450, label: 'قسيمة جارينا #4' },
+            { code: 'FF-P2Q8-MK5T-Y7NW', reward: 583, label: 'قسيمة جارينا #5' },
+            { code: 'FF-D4F6-R9J2-VB3X', reward: 650, label: 'قسيمة جارينا #6' },
+            { code: 'FF-N8W1-Q5L7-T6HP', reward: 720, label: 'قسيمة جارينا #7' },
+            { code: 'FF-J3K9-B2M4-X8NQ', reward: 850, label: 'قسيمة جارينا #8' },
+            { code: 'FF-V7R5-P1W6-L9BT', reward: 980, label: 'قسيمة جارينا #9' },
+            { code: 'FF-T2X8-N4Q3-M6KW', reward: 1188, label: 'قسيمة جارينا #10' },
+            { code: 'FF-L9P3-W5N2-Q8BX', reward: 150, label: 'قسيمة جارينا #11' },
+            { code: 'FF-Q6W2-T4M9-R7NK', reward: 260, label: 'قسيمة جارينا #12' },
+            { code: 'FF-X8B5-V3L1-P9QT', reward: 380, label: 'قسيمة جارينا #13' },
+            { code: 'FF-M4N7-K2W6-B8RX', reward: 500, label: 'قسيمة جارينا #14' },
+            { code: 'FF-W3Q9-P5L1-T7NB', reward: 620, label: 'قسيمة جارينا #15' },
+            { code: 'FF-K7R2-B6W4-N9MX', reward: 750, label: 'قسيمة جارينا #16' },
+            { code: 'FF-P1T8-L5Q3-W6BN', reward: 880, label: 'قسيمة جارينا #17' },
+            { code: 'FF-R5N9-Q2W7-M4TX', reward: 1020, label: 'قسيمة جارينا #18' },
+            { code: 'FF-B8W3-T6L2-P9NQ', reward: 1250, label: 'قسيمة جارينا #19' },
+            { code: 'FF-N2Q7-W5R8-L4BX', reward: 1500, label: 'قسيمة جارينا #20' },
+            { code: 'FF-T6P9-Q3W5-N8MR', reward: 180, label: 'قسيمة جارينا #21' },
+            { code: 'FF-W4L7-B2N6-Q9TX', reward: 310, label: 'قسيمة جارينا #22' },
+            { code: 'FF-L8N3-P5W1-T7QB', reward: 420, label: 'قسيمة جارينا #23' },
+            { code: 'FF-Q2W9-N6R4-M8LT', reward: 560, label: 'قسيمة جارينا #24' },
+            { code: 'FF-B5T7-W3P2-N9QX', reward: 700, label: 'قسيمة جارينا #25' },
+            { code: 'FF-N9Q4-L6W8-T2RB', reward: 840, label: 'قسيمة جارينا #26' },
+            { code: 'FF-P3W7-N5Q1-L9TX', reward: 990, label: 'قسيمة جارينا #27' },
+            { code: 'FF-W8L2-Q6N4-B7MT', reward: 1350, label: 'قسيمة جارينا #28' },
+            { code: 'FF-T4N9-W3P7-Q5LB', reward: 1800, label: 'قسيمة جارينا #29' },
+            { code: 'FF-R7Q2-L5W8-N6TX', reward: 2420, label: 'قسيمة جارينا #30' }
+        ];
+
+        function findValidCoupon(rawInput) {
+            if (!rawInput) return null;
+            const normalized = rawInput.trim().toUpperCase();
+            return VALID_COUPONS.find(c => c.code === normalized) || null;
+        }
+
+        const liveOrdersSample = [
+            'تم شحن 583 جوهرة للاعب ID: 492018432 (السعودية) قبل 6 ثوانٍ',
+            'تم شحن العضوية الشهرية للاعب ID: 738192045 (المغرب العربي) قبل 14 ثانية',
+            'تم شحن 1188 جوهرة للاعب ID: 910283746 (الشرق الأوسط) قبل 21 ثانية',
+            'تم شحن 760 عملة دلتا للاعب ID: 551029384 (مصر) قبل 29 ثانية',
+            'تم شحن 2420 جوهرة للاعب ID: 827364519 (الشرق الأوسط) قبل 37 ثانية'
+        ];
+
+        // حالة التطبيق الحالية
+        let state = {
+            selectedGameId: 'freefire',
+            player: null,
+            activeTab: 'buy',
+            selectedItem: {
+                type: 'package',
+                id: 'ff1',
+                title: '100 + 10 جوهرة',
+                totalReceivedText: '110 جوهرة',
+                bonusText: '+10 مكافأة',
+                basePrice: 1.00
+            },
+            selectedPaymentId: 'wallet',
+            claimedVouchers: [],   // قسائم تم سحبها ولم تُستعمل بعد (لا تُنقص العداد في موقع القسائم)
+            redeemedVouchers: [],  // قسائم تم استعمالها فعلياً في الشراء أو الاسترداد (تُنقص العداد فعلياً)
+            orderHistory: [],
+            region: {
+                name: 'الشرق الأوسط وشمال أفريقيا',
+                code: 'USD',
+                rate: 1,
+                symbol: '$',
+                serverShort: 'الشرق الأوسط'
+            },
+            lang: 'ar'
+        };
+
+        // حفظ ومزامنة حالة القسائم المستعملة والمسحوبة في التخزين المحلي
+        function syncVoucherStorage() {
+            try {
+                const payload = {
+                    total: VALID_COUPONS.length,
+                    claimed: state.claimedVouchers,
+                    used: state.redeemedVouchers,
+                    remaining: getRemainingCouponsCount(),
+                    deductOn: 'purchase_confirm',
+                    updatedAt: Date.now()
+                };
+                localStorage.setItem('garena_coupon_sync_state', JSON.stringify(payload));
+            } catch (err) {
+                // تجاهل أخطاء التخزين المحلي في بعض المتصفحات
+            }
+        }
+
+        function loadVoucherStorage() {
+            try {
+                const raw = localStorage.getItem('garena_coupon_sync_state');
+                if (!raw) return;
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed.used)) {
+                    state.redeemedVouchers = parsed.used.map(c => String(c).toUpperCase());
+                }
+                if (Array.isArray(parsed.claimed)) {
+                    state.claimedVouchers = parsed.claimed
+                        .map(c => String(c).toUpperCase())
+                        .filter(c => !state.redeemedVouchers.includes(c));
+                }
+            } catch (err) {
+                // تجاهل أخطاء قراءة التخزين المحلي
+            }
+        }
+
+        // ==================== دوال العرض والتحديث (RENDERING) ====================
+        function initApp() {
+            loadVoucherStorage();
+            renderGames();
+            renderTopupOptions();
+            renderPaymentMethods();
+            updateCheckoutBar();
+            updateVoucherCountersUI();
+            consumeVoucherFromUrlParams();
+            startLiveOrdersTicker();
+        }
+
+        // حساب القسائم المتبقية: لا يُخصم الكود المسحوب إلا عند استعماله فعلياً في الشراء أو الاسترداد
+        function getRemainingCouponsCount() {
+            const usedUnique = new Set(state.redeemedVouchers.map(c => String(c).toUpperCase()));
+            return Math.max(0, VALID_COUPONS.length - usedUnique.size);
+        }
+
+        // تحديث عداد القسائم المتبقية وحفظ حالة المزامنة
+        function updateVoucherCountersUI() {
+            syncVoucherStorage();
+        }
+
+        // استقبال كود القسيمة والعدد المتبقي القادم من رابط صفحة القسائم دون خصمه قبل إتمام الشراء
+        function consumeVoucherFromUrlParams() {
+            try {
+                const params = new URLSearchParams(window.location.search || '');
+                const rawUsedList = params.get('used');
+                if (rawUsedList) {
+                    rawUsedList.split(',').forEach(code => {
+                        const valid = findValidCoupon(code);
+                        if (valid && !state.redeemedVouchers.includes(valid.code)) {
+                            state.redeemedVouchers.push(valid.code);
+                        }
+                    });
+                }
+
+                // دعم استقبال عدد مستعمل/متبقي ممرر من موقع القسائم إذا وُجد دون إنقاصه لمجرد السحب
+                const rawUsedCount = params.get('usedCount');
+                if (rawUsedCount !== null && /^\d+$/.test(rawUsedCount.trim())) {
+                    const parsedUsedCount = Math.min(VALID_COUPONS.length, Math.max(0, parseInt(rawUsedCount.trim(), 10)));
+                    while (state.redeemedVouchers.length < parsedUsedCount) {
+                        const nextCoupon = VALID_COUPONS.find(c => !state.redeemedVouchers.includes(c.code));
+                        if (!nextCoupon) break;
+                        state.redeemedVouchers.push(nextCoupon.code);
+                    }
+                }
+
+                const rawCode = params.get('voucher') || params.get('coupon') || params.get('code');
+                if (!rawCode) {
+                    updateVoucherCountersUI();
+                    return;
+                }
+
+                const coupon = findValidCoupon(rawCode);
+                if (!coupon) return;
+
+                // تسجيل الكود كـ "مسحوب بانتظار الاستعمال" دون إنقاص عدد القسائم المتبقية
+                if (!state.claimedVouchers.includes(coupon.code) && !state.redeemedVouchers.includes(coupon.code)) {
+                    state.claimedVouchers.push(coupon.code);
+                }
+
+                const paymentInput = document.getElementById('paymentVoucherInput');
+                const redeemInput = document.getElementById('voucherCodeInput');
+                if (paymentInput) paymentInput.value = coupon.code;
+                if (redeemInput) redeemInput.value = coupon.code;
+
+                updateVoucherCountersUI();
+                showToast(`تم استلام القسيمة (${coupon.code}) ولن تُخصم من المتبقي حتى تستعملها في الشراء`, 'info');
+            } catch (err) {
+                // تجاهل أخطاء قراءة بارامترات الرابط
+            }
+        }
+
+        function startLiveOrdersTicker() {
+            let idx = 0;
+            const tickerEl = document.getElementById('liveTickerText');
+            if (!tickerEl) return;
+
+            setInterval(() => {
+                idx = (idx + 1) % liveOrdersSample.length;
+                tickerEl.textContent = liveOrdersSample[idx];
+            }, 4800);
+        }
+
+        function getCurrentGame() {
+            return gamesData.find(g => g.id === state.selectedGameId) || gamesData[0];
+        }
+
+        function getCurrentPayment() {
+            return paymentMethods.find(p => p.id === state.selectedPaymentId) || paymentMethods[0];
+        }
+
+        function formatCurrency(usdAmount) {
+            const converted = (Number(usdAmount) || 0) * (state.region?.rate || 1);
+            if (state.region?.code === 'USD') {
+                return `$${converted.toFixed(2)}`;
+            }
+            return `${converted.toFixed(2)} ${state.region?.symbol || ''}`.trim();
+        }
+
+        function renderGames() {
+            const container = document.getElementById('gamesContainer');
+            const bannerBg = document.getElementById('heroBannerBg');
+            const currentGame = getCurrentGame();
+
+            if (bannerBg) {
+                bannerBg.className = `absolute inset-0 bg-gradient-to-l ${currentGame.gradient} transition-all duration-500`;
+            }
+
+            const showcaseIcon = document.getElementById('showcaseGameIcon');
+            const showcaseTitle = document.getElementById('showcaseGameTitle');
+            const showcaseDesc = document.getElementById('showcaseGameDesc');
+            if (showcaseIcon) showcaseIcon.className = `${currentGame.iconClass} text-lg`;
+            if (showcaseTitle) showcaseTitle.textContent = currentGame.name;
+            if (showcaseDesc) showcaseDesc.textContent = `${currentGame.arabicSub} • أدخل معرّف اللاعب (Player ID) فقط دون الحاجة لكلمة مرور.`;
+
+            if (!container) return;
+
+            container.innerHTML = gamesData.map(game => {
+                const isSelected = game.id === state.selectedGameId;
+                return `
+                    <button type="button" onclick="selectGame('${game.id}')" class="text-right group relative rounded-2xl p-4 border transition-all duration-200 flex items-center gap-3.5 ${
+                        isSelected
+                            ? 'bg-[#1B1F2C] border-brand-red selected-ring'
+                            : 'bg-[#12151E]/85 hover:bg-[#191D2A] border-brand-border hover:border-gray-600'
+                    }">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105 ${
+                            isSelected
+                                ? 'bg-gradient-to-br from-brand-red to-brand-orange text-white shadow-lg shadow-brand-red/30'
+                                : 'bg-brand-card text-gray-300 border border-brand-border'
+                        }">
+                            <i class="${game.iconClass} text-xl"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="font-extrabold text-sm sm:text-base text-white truncate">${game.name}</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                                    isSelected
+                                        ? 'bg-brand-red/20 text-brand-orange border border-brand-orange/30'
+                                        : 'bg-white/5 text-gray-400'
+                                }">${game.badge}</span>
+                            </div>
+                            <p class="text-xs text-gray-400 truncate mt-0.5">${game.arabicSub}</p>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function renderTopupOptions() {
+            const game = getCurrentGame();
+            const titleEl = document.getElementById('currencySectionTitle');
+            const pkgGrid = document.getElementById('packagesGrid');
+            const spGrid = document.getElementById('specialOffersGrid');
+
+            if (titleEl) {
+                titleEl.textContent = game.currencyPlural;
+            }
+
+            if (pkgGrid) {
+                pkgGrid.innerHTML = game.packages.map(pkg => {
+                    const isSelected = state.selectedItem.type === 'package' && state.selectedItem.id === pkg.id;
+                    const totalAmount = pkg.base + pkg.bonus;
+                    return `
+                        <button type="button" onclick="selectPackage('${pkg.id}')" class="relative text-right rounded-2xl p-4 border transition-all duration-200 flex flex-col justify-between gap-3 ${
+                            isSelected
+                                ? 'bg-[#1C2030] border-brand-red selected-ring'
+                                : 'bg-[#0D0F14] hover:bg-[#151924] border-brand-border hover:border-gray-600'
+                        }">
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/25 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-gem text-sky-400 text-lg diamond-glow"></i>
+                                </div>
+                                <span class="text-[11px] font-extrabold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 px-2 py-0.5 rounded-full">
+                                    +${pkg.bonus.toLocaleString()} مجاناً
+                                </span>
+                            </div>
+
+                            <div>
+                                <div class="font-black text-base sm:text-lg text-white">
+                                    ${pkg.base.toLocaleString()}
+                                    <span class="text-xs font-bold text-brand-orange">+ ${pkg.bonus.toLocaleString()}</span>
+                                </div>
+                                <div class="text-[11px] text-gray-400 mt-0.5">المجموع: ${totalAmount.toLocaleString()} ${game.currencyName}</div>
+                            </div>
+
+                            <div class="pt-2 border-t border-brand-border/70 flex items-center justify-between">
+                                <span class="text-xs text-gray-400">السعر</span>
+                                <span class="font-black text-sm sm:text-base text-white">${formatCurrency(pkg.price)}</span>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+            }
+
+            if (spGrid) {
+                spGrid.innerHTML = game.specials.map(sp => {
+                    const isSelected = state.selectedItem.type === 'special' && state.selectedItem.id === sp.id;
+                    return `
+                        <button type="button" onclick="selectSpecial('${sp.id}')" class="relative text-right rounded-2xl p-4 border transition-all duration-200 flex flex-col justify-between gap-3 ${
+                            isSelected
+                                ? 'bg-[#1C2030] border-brand-red selected-ring'
+                                : 'bg-[#0D0F14] hover:bg-[#151924] border-brand-border hover:border-gray-600'
+                        }">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
+                                        <i class="fa-solid ${sp.icon} text-amber-400 text-base gold-glow"></i>
+                                    </div>
+                                    <span class="font-extrabold text-sm text-white truncate">${sp.title}</span>
+                                </div>
+                                ${sp.hot ? '<span class="text-[10px] font-black uppercase bg-brand-red text-white px-2 py-0.5 rounded-md shrink-0">HOT</span>' : ''}
+                            </div>
+
+                            <p class="text-xs text-gray-400 leading-relaxed">${sp.desc}</p>
+
+                            <div class="pt-2 border-t border-brand-border/70 flex items-center justify-between">
+                                <span class="text-xs text-gray-400">عرض خاص</span>
+                                <span class="font-black text-sm sm:text-base text-brand-orange">${formatCurrency(sp.price)}</span>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+            }
+        }
+
+        function renderPaymentMethods() {
+            const grid = document.getElementById('paymentMethodsGrid');
+            const voucherBox = document.getElementById('garenaVoucherPaymentBox');
+
+            if (voucherBox) {
+                if (state.selectedPaymentId === 'wallet') {
+                    voucherBox.classList.remove('hidden');
+                } else {
+                    voucherBox.classList.add('hidden');
+                }
+            }
+
+            if (!grid) return;
+
+            grid.innerHTML = paymentMethods.map(pm => {
+                const isSelected = pm.id === state.selectedPaymentId;
+                return `
+                    <button type="button" onclick="selectPaymentMethod('${pm.id}')" class="text-right rounded-2xl p-4 border transition-all duration-200 flex flex-col justify-between gap-2.5 ${
+                        isSelected
+                            ? 'bg-[#1C2030] border-brand-red selected-ring'
+                            : 'bg-[#0D0F14] hover:bg-[#151924] border-brand-border hover:border-gray-600'
+                    }">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <i class="${pm.icon} ${pm.accent} text-xl"></i>
+                                <span class="font-extrabold text-sm text-white">${pm.name}</span>
+                            </div>
+                            <span class="text-[10px] font-bold bg-white/5 text-gray-300 border border-white/10 px-2 py-0.5 rounded-full">${pm.badge}</span>
+                        </div>
+                        <p class="text-xs text-gray-400">${pm.sub}</p>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function updateCheckoutBar() {
+            const game = getCurrentGame();
+            const payment = getCurrentPayment();
+            const totalUsd = state.selectedItem.basePrice * payment.feeMultiplier;
+
+            document.getElementById('checkoutItemTitle').textContent = state.selectedItem.title;
+            document.getElementById('checkoutBonusBadge').textContent = state.selectedItem.bonusText;
+            document.getElementById('checkoutGameName').textContent = game.name;
+            document.getElementById('checkoutPaymentName').textContent = payment.name;
+            document.getElementById('checkoutTotalPrice').textContent = `$${totalUsd.toFixed(2)}`;
+
+            const localSubEl = document.getElementById('checkoutLocalPriceSub');
+            if (localSubEl) {
+                if (state.region.code !== 'USD') {
+                    localSubEl.textContent = formatCurrency(totalUsd);
+                    localSubEl.classList.remove('hidden');
+                } else {
+                    localSubEl.classList.add('hidden');
+                }
+            }
+
+            const iconBox = document.getElementById('checkoutItemIcon');
+            if (iconBox) {
+                if (state.selectedItem.type === 'special') {
+                    iconBox.className = 'w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0';
+                    iconBox.innerHTML = '<i class="fa-solid fa-crown text-amber-400 text-xl gold-glow"></i>';
+                } else {
+                    iconBox.className = 'w-11 h-11 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center shrink-0';
+                    iconBox.innerHTML = '<i class="fa-solid fa-gem text-sky-400 text-xl diamond-glow"></i>';
+                }
+            }
+        }
+
+        function switchTopupTab(tab) {
+            state.activeTab = tab;
+            const buyBtn = document.getElementById('tabBuyBtn');
+            const redeemBtn = document.getElementById('tabRedeemBtn');
+            const buyContent = document.getElementById('buyTabContent');
+            const redeemContent = document.getElementById('redeemTabContent');
+            const paymentSection = document.getElementById('paymentSection');
+            const checkoutBar = document.getElementById('stickyCheckoutBar');
+
+            if (tab === 'buy') {
+                buyBtn.className = 'flex-1 sm:flex-none px-5 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-brand-red to-brand-orange text-white shadow transition flex items-center justify-center gap-2';
+                redeemBtn.className = 'flex-1 sm:flex-none px-5 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition flex items-center justify-center gap-2';
+                buyContent.classList.remove('hidden');
+                redeemContent.classList.add('hidden');
+                paymentSection.classList.remove('hidden');
+                checkoutBar.classList.remove('hidden');
+            } else {
+                redeemBtn.className = 'flex-1 sm:flex-none px-5 py-2 rounded-lg text-sm font-bold bg-gradient-to-r from-brand-red to-brand-orange text-white shadow transition flex items-center justify-center gap-2';
+                buyBtn.className = 'flex-1 sm:flex-none px-5 py-2 rounded-lg text-sm font-bold text-gray-400 hover:text-white transition flex items-center justify-center gap-2';
+                buyContent.classList.add('hidden');
+                redeemContent.classList.remove('hidden');
+                paymentSection.classList.add('hidden');
+                checkoutBar.classList.add('hidden');
+            }
+        }
+
+        function handleIdLogin() {
+            const input = document.getElementById('playerIdInput');
+            const rawId = input.value.trim();
+
+            if (!/^\d{5,15}$/.test(rawId)) {
+                showToast('يرجى إدخال معرّف لاعب صحيح (أرقام فقط من 5 إلى 15 خانة)', 'error');
+                input.focus();
+                return;
+            }
+
+            const sampleNicknames = [
+                '『FF』الـقـنـاص_PRO',
+                '『MENA』أسطورة_البويا',
+                '『VIP』صقر_الصحراء',
+                '『Garena』بطل_الساحة'
+            ];
+            const nickIndex = parseInt(rawId.slice(-1), 10) % sampleNicknames.length;
+            const computedLevel = 45 + (parseInt(rawId.slice(-2), 10) % 45);
+
+            state.player = {
+                id: rawId,
+                name: sampleNicknames[nickIndex],
+                level: computedLevel
+            };
+
+            applyPlayerLoggedInUI();
+            showToast(`تم التحقق من الحساب (${state.player.name}) بنجاح`, 'success');
+        }
+
+        function applyPlayerLoggedInUI() {
+            if (!state.player) return;
+            document.getElementById('loginFormContainer').classList.add('hidden');
+            document.getElementById('loggedInProfile').classList.remove('hidden');
+            document.getElementById('playerNickname').textContent = state.player.name;
+            document.getElementById('displayPlayerId').textContent = state.player.id;
+            const lvlBadge = document.getElementById('playerLevelBadge');
+            if (lvlBadge) lvlBadge.textContent = `LV. ${state.player.level || 70}`;
+            const serverEl = document.getElementById('displayPlayerServer');
+            if (serverEl) serverEl.textContent = state.region.serverShort;
+        }
+
+        function logoutPlayer() {
+            state.player = null;
+            document.getElementById('playerIdInput').value = '';
+            document.getElementById('loggedInProfile').classList.add('hidden');
+            document.getElementById('loginFormContainer').classList.remove('hidden');
+            showToast('تم تسجيل الخروج من الحساب', 'info');
+        }
+
+        function selectPaymentMethod(paymentId) {
+            state.selectedPaymentId = paymentId;
+            renderPaymentMethods();
+            updateCheckoutBar();
+            if (paymentId === 'wallet') {
+                const voucherInput = document.getElementById('paymentVoucherInput');
+                if (voucherInput) {
+                    voucherInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    voucherInput.focus();
+                }
+            }
+        }
+
+        // توجيه المستخدم إلى موقع الحصول على القسيمة مع تمرير القسائم المستعملة فعلياً فقط ليبقى العداد ثابتاً حتى الاستعمال في الشراء
+        function handleGetVoucherClick() {
+            syncVoucherStorage();
+            const targetUrl = (typeof VOUCHER_GET_URL === 'string' ? VOUCHER_GET_URL.trim() : '');
+            if (targetUrl) {
+                let finalUrl = targetUrl;
+                try {
+                    const urlObj = new URL(targetUrl);
+                    const remainingAfterActualUseOnly = getRemainingCouponsCount();
+                    urlObj.searchParams.set('total', String(VALID_COUPONS.length));
+                    urlObj.searchParams.set('remaining', String(remainingAfterActualUseOnly));
+                    urlObj.searchParams.set('usedCount', String(state.redeemedVouchers.length));
+                    urlObj.searchParams.set('used', state.redeemedVouchers.join(','));
+                    urlObj.searchParams.set('claimed', state.claimedVouchers.join(','));
+                    urlObj.searchParams.set('deductOnPurchaseOnly', '1');
+                    finalUrl = urlObj.toString();
+                } catch (err) {
+                    finalUrl = targetUrl;
+                }
+
+                showToast('جاري تحويلك إلى موقع القسائم (العداد لا ينقص إلا عند استعمال القسيمة في الشراء)...', 'info');
+                setTimeout(() => {
+                    try {
+                        window.location.assign(finalUrl);
+                    } catch (err) {
+                        window.location.href = finalUrl;
+                    }
+                }, 450);
+            } else {
+                showToast('سيتم تفعيل التحويل إلى موقع الحصول على القسيمة فور إرسال الرابط الخاص به.', 'info');
+            }
+        }
+
+        function selectGame(gameId) {
+            state.selectedGameId = gameId;
+            const game = getCurrentGame();
+            const firstPkg = game.packages[0];
+            if (firstPkg) {
+                state.selectedItem = {
+                    type: 'package',
+                    id: firstPkg.id,
+                    title: `${firstPkg.base.toLocaleString()} + ${firstPkg.bonus.toLocaleString()} ${game.currencyName}`,
+                    totalReceivedText: `${(firstPkg.base + firstPkg.bonus).toLocaleString()} ${game.currencyName}`,
+                    bonusText: `+${firstPkg.bonus.toLocaleString()} مكافأة`,
+                    basePrice: firstPkg.price
+                };
+            }
+            renderGames();
+            renderTopupOptions();
+            updateCheckoutBar();
+            showToast(`تم التبديل إلى لعبة ${game.name}`, 'info');
+        }
+
+        function selectPackage(pkgId) {
+            const game = getCurrentGame();
+            const pkg = game.packages.find(p => p.id === pkgId);
+            if (!pkg) return;
+
+            state.selectedItem = {
+                type: 'package',
+                id: pkg.id,
+                title: `${pkg.base.toLocaleString()} + ${pkg.bonus.toLocaleString()} ${game.currencyName}`,
+                totalReceivedText: `${(pkg.base + pkg.bonus).toLocaleString()} ${game.currencyName}`,
+                bonusText: `+${pkg.bonus.toLocaleString()} مكافأة`,
+                basePrice: pkg.price
+            };
+            renderTopupOptions();
+            updateCheckoutBar();
+        }
+
+        function selectSpecial(specialId) {
+            const game = getCurrentGame();
+            const sp = game.specials.find(s => s.id === specialId);
+            if (!sp) return;
+
+            state.selectedItem = {
+                type: 'special',
+                id: sp.id,
+                title: sp.title,
+                totalReceivedText: sp.title,
+                bonusText: sp.hot ? 'عرض HOT' : 'عرض مميز',
+                basePrice: sp.price
+            };
+            renderTopupOptions();
+            updateCheckoutBar();
+        }
+
+        function toggleRegionDropdown() {
+            const dd = document.getElementById('regionDropdown');
+            dd.classList.toggle('hidden');
+        }
+
+        function selectRegion(regionName, currencyCode, rate, symbol, serverShort) {
+            state.region = {
+                name: regionName,
+                code: currencyCode,
+                rate: Number(rate) || 1,
+                symbol: symbol || '$',
+                serverShort: serverShort || regionName
+            };
+            document.getElementById('currentRegionText').textContent = regionName;
+            document.getElementById('currentCurrencyTag').textContent = currencyCode;
+            const serverEl = document.getElementById('displayPlayerServer');
+            if (serverEl) serverEl.textContent = state.region.serverShort;
+            document.getElementById('regionDropdown').classList.add('hidden');
+            renderTopupOptions();
+            updateCheckoutBar();
+            showToast(`تم تعيين المنطقة: ${regionName} (${currencyCode})`, 'success');
+        }
+
+        // استرداد القسيمة مباشرة وتثبيتها كمستخدمة لإنقاص العداد عند الاستعمال الفعلي
+        function handleVoucherRedeem() {
+            if (!state.player) {
+                showToast('يرجى تسجيل الدخول أولاً قبل استرداد القسيمة', 'error');
+                document.getElementById('playerIdInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('playerIdInput').focus();
+                return;
+            }
+
+            const input = document.getElementById('voucherCodeInput');
+            const coupon = findValidCoupon(input.value);
+
+            if (!coupon) {
+                showToast('القسيمة غير صالحة! يرجى إدخال أحد أكواد القسائم الـ 30 المعتمدة', 'error');
+                input.focus();
+                return;
+            }
+
+            if (state.redeemedVouchers.includes(coupon.code)) {
+                showToast(`تم استخدام القسيمة (${coupon.code}) مسبقاً ولا يمكن الاستفادة منها مرة أخرى`, 'error');
+                input.focus();
+                return;
+            }
+
+            state.redeemedVouchers.push(coupon.code);
+            state.claimedVouchers = state.claimedVouchers.filter(c => c !== coupon.code);
+            updateVoucherCountersUI();
+
+            const game = getCurrentGame();
+            populateAndShowReceipt({
+                packageName: `${coupon.label} (${coupon.code})`,
+                totalReceivedText: `${coupon.reward.toLocaleString()} ${game.currencyName}`,
+                paymentMethod: `قسيمة جارينا - ${coupon.code}`,
+                amountPaid: 'US$ 0.00 (قسيمة)'
+            });
+
+            input.value = '';
+            showToast(`تم استرداد القسيمة (${coupon.code}) وتحديث عداد القسائم المتبقية`, 'success');
+        }
+
+        function initiateCheckout() {
+            if (state.activeTab !== 'buy') {
+                switchTopupTab('buy');
+                return;
+            }
+
+            if (!state.player) {
+                showToast('يرجى إدخال معرّف اللاعب أو تسجيل الدخول أولاً', 'error');
+                document.getElementById('playerIdInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('playerIdInput').focus();
+                return;
+            }
+
+            const game = getCurrentGame();
+            const payment = getCurrentPayment();
+
+            const paymentVoucherInput = document.getElementById('paymentVoucherInput');
+            const coupon = findValidCoupon(paymentVoucherInput ? paymentVoucherInput.value : '');
+
+            if (!coupon) {
+                showToast('اكتب قسيمة جارينا صحيحة من الأكواد الـ 30 المعتمدة أولاً', 'error');
+                if (paymentVoucherInput) {
+                    paymentVoucherInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    paymentVoucherInput.focus();
+                }
+                return;
+            }
+
+            if (state.redeemedVouchers.includes(coupon.code)) {
+                showToast(`تم استخدام القسيمة (${coupon.code}) مسبقاً ولا يمكن الاستفادة منها مرة أخرى`, 'error');
+                if (paymentVoucherInput) paymentVoucherInput.focus();
+                return;
+            }
+
+            const totalUsd = state.selectedItem.basePrice * payment.feeMultiplier;
+
+            document.getElementById('reviewGameIcon').className = `${game.iconClass} text-white text-xl`;
+            document.getElementById('reviewGameName').textContent = game.name;
+            document.getElementById('reviewPackageTitle').textContent = state.selectedItem.title;
+            document.getElementById('reviewPrice').textContent = `$${totalUsd.toFixed(2)}`;
+
+            const reviewLocalEl = document.getElementById('reviewLocalPrice');
+            if (reviewLocalEl) {
+                if (state.region.code !== 'USD') {
+                    reviewLocalEl.textContent = formatCurrency(totalUsd);
+                    reviewLocalEl.classList.remove('hidden');
+                } else {
+                    reviewLocalEl.classList.add('hidden');
+                }
+            }
+
+            document.getElementById('reviewPlayerName').textContent = state.player.name;
+            document.getElementById('reviewPlayerId').textContent = state.player.id;
+            document.getElementById('reviewPaymentMethod').textContent = `${payment.name} (${coupon.code})`;
+
+            document.getElementById('orderReviewStep').classList.remove('hidden');
+            document.getElementById('orderSpinnerStep').classList.add('hidden');
+
+            const modal = document.getElementById('paymentProcessingModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function executePaymentProcess() {
+            document.getElementById('orderReviewStep').classList.add('hidden');
+            document.getElementById('orderSpinnerStep').classList.remove('hidden');
+
+            setTimeout(() => {
+                closeModal('paymentProcessingModal');
+
+                const game = getCurrentGame();
+                const payment = getCurrentPayment();
+                const totalUsd = state.selectedItem.basePrice * payment.feeMultiplier;
+
+                const paymentVoucherInput = document.getElementById('paymentVoucherInput');
+                const coupon = findValidCoupon(paymentVoucherInput ? paymentVoucherInput.value : '');
+
+                if (coupon && !state.redeemedVouchers.includes(coupon.code)) {
+                    state.redeemedVouchers.push(coupon.code);
+                    state.claimedVouchers = state.claimedVouchers.filter(c => c !== coupon.code);
+                    updateVoucherCountersUI();
+                }
+
+                if (paymentVoucherInput) paymentVoucherInput.value = '';
+
+                const codeText = coupon ? coupon.code : 'VOUCHER';
+                const paidFormatted = state.region.code === 'USD'
+                    ? `US$ ${totalUsd.toFixed(2)}`
+                    : `US$ ${totalUsd.toFixed(2)} (${formatCurrency(totalUsd)})`;
+
+                populateAndShowReceipt({
+                    packageName: state.selectedItem.title,
+                    totalReceivedText: state.selectedItem.totalReceivedText,
+                    paymentMethod: `${payment.name} (${codeText})`,
+                    amountPaid: paidFormatted
+                });
+            }, 1300);
+        }
+
+        function populateAndShowReceipt({ packageName, totalReceivedText, paymentMethod, amountPaid }) {
+            const game = getCurrentGame();
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            const formattedTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            const orderId = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${Math.floor(1000000000 + Math.random() * 8999999999)}`;
+
+            document.getElementById('receiptGameIcon').className = `${game.iconClass} text-white text-xl`;
+            document.getElementById('receiptGameLabel').textContent = game.name;
+            document.getElementById('receiptTotalReceived').textContent = totalReceivedText;
+
+            const currIcon = document.getElementById('receiptCurrencyIcon');
+            if (state.selectedItem.type === 'special') {
+                currIcon.className = 'fa-solid fa-crown text-amber-400 text-base gold-glow';
+            } else {
+                currIcon.className = 'fa-solid fa-gem text-sky-400 text-base diamond-glow';
+            }
+
+            document.getElementById('modalGameName').textContent = game.name;
+            document.getElementById('modalPlayerId').textContent = state.player.id;
+            document.getElementById('modalPlayerNickname').textContent = state.player.name;
+            document.getElementById('modalPackageName').textContent = packageName;
+            document.getElementById('modalPaymentMethod').textContent = paymentMethod;
+            document.getElementById('modalAmountPaid').textContent = amountPaid;
+            document.getElementById('modalOrderId').textContent = orderId;
+            document.getElementById('modalTransactionTime').textContent = formattedTime;
+
+            recordOrderInHistory({
+                orderId,
+                gameName: game.name,
+                playerId: state.player.id,
+                packageName,
+                totalReceivedText,
+                amountPaid,
+                time: formattedTime
+            });
+
+            const successModal = document.getElementById('checkoutSuccessModal');
+            successModal.classList.remove('hidden');
+            successModal.classList.add('flex');
+        }
+
+        function recordOrderInHistory(order) {
+            state.orderHistory.unshift(order);
+            if (state.orderHistory.length > 25) {
+                state.orderHistory.pop();
+            }
+            const badge = document.getElementById('orderHistoryBadge');
+            if (badge) {
+                badge.textContent = String(state.orderHistory.length);
+                badge.classList.remove('hidden');
+            }
+        }
+
+        function openOrderHistoryModal() {
+            const listEl = document.getElementById('orderHistoryList');
+            if (listEl) {
+                if (!state.orderHistory.length) {
+                    listEl.innerHTML = '<div class="text-center py-8 text-xs text-gray-400">لا توجد طلبات مكتملة في جلستك الحالية بعد.</div>';
+                } else {
+                    listEl.innerHTML = state.orderHistory.map(item => `
+                        <div class="bg-[#0D0F14] border border-brand-border rounded-xl p-3.5 text-xs space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="font-extrabold text-white">${item.gameName} • ${item.totalReceivedText}</span>
+                                <span class="text-emerald-400 font-bold">مكتمل ✓</span>
+                            </div>
+                            <div class="flex items-center justify-between text-gray-400">
+                                <span>UID: <strong class="font-mono text-gray-200">${item.playerId}</strong></span>
+                                <span class="text-brand-orange font-bold">${item.amountPaid}</span>
+                            </div>
+                            <div class="flex items-center justify-between text-[11px] text-gray-500 pt-1 border-t border-brand-border/60">
+                                <span class="font-mono">#${item.orderId}</span>
+                                <span dir="ltr">${item.time}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+            const modal = document.getElementById('orderHistoryModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function copyTransactionId() {
+            const orderIdEl = document.getElementById('modalOrderId');
+            if (!orderIdEl) return;
+            const textToCopy = orderIdEl.textContent.trim();
+
+            try {
+                const tempInput = document.createElement('input');
+                tempInput.value = textToCopy;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                showToast('تم نسخ رقم المعاملة بنجاح', 'success');
+            } catch (err) {
+                showToast('تعذر النسخ التلقائي، يمكنك تحديد الرقم يدوياً', 'info');
+            }
+        }
+
+        function saveOrPrintReceipt() {
+            try {
+                window.print();
+            } catch (err) {
+                showToast('يمكنك حفظ الإيصال كملف PDF من خيارات المتصفح', 'info');
+            }
+        }
+
+        function openHelpModal() {
+            openInfoModal(
+                'كيفية العثور على معرّف اللاعب (Player ID)',
+                '<p>1. افتح اللعبة على جهازك وانتقل إلى الشاشة الرئيسية.</p><p>2. اضغط على أيقونة ملفك الشخصي في الزاوية العلوية.</p><p>3. انسخ رقم <strong>معرّف اللاعب (UID)</strong> الظاهر أسفل اسمك وألصقه في الحقل المخصص في الخطوة الأولى.</p>'
+            );
+        }
+
+        function openInfoModal(title, htmlBody) {
+            document.getElementById('infoModalTitle').textContent = title;
+            document.getElementById('infoModalBody').innerHTML = htmlBody;
+            const modal = document.getElementById('infoModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        let toastTimer = null;
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toastNotification');
+            const icon = document.getElementById('toastIcon');
+            const text = document.getElementById('toastMessage');
+
+            text.textContent = message;
+            if (type === 'success') {
+                icon.className = 'fa-solid fa-circle-check text-emerald-400';
+            } else if (type === 'error') {
+                icon.className = 'fa-solid fa-circle-exclamation text-brand-red';
+            } else {
+                icon.className = 'fa-solid fa-circle-info text-sky-400';
+            }
+
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3000);
+        }
+
+        document.addEventListener('click', function (event) {
+            const regionBtn = document.getElementById('regionBtn');
+            const dropdown = document.getElementById('regionDropdown');
+            if (regionBtn && dropdown && !regionBtn.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
